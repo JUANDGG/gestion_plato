@@ -1,5 +1,5 @@
-import {uriConexion}  from './uriConexion';
-import {plantillaPlato} from './plantillaPlato';
+import {uriConexion}  from './config.js';
+import {plantillaPlato} from './plantilla.js';
 
 console.log("asdasd");
 

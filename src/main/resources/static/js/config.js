@@ -1,5 +1,5 @@
 const uri ={
-    protocol :"http",
+    protocol :"http://",
     hostName: "localhost",
     port: "8080",
     path :"/api/plato"
@@ -9,7 +9,9 @@ const uri ={
 
 
 
-const uriConexion  =`${uri.protocol}://${uri.hostName}:${uri.port} /${uri.path}` ;
+const uriConexion  =`${uri.protocol}${uri.hostName}:${uri.port}${uri.path}` ;
+
+console.log(uriConexion);
 
 export {
     uriConexion
