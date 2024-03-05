@@ -37,3 +37,7 @@ body{
     width: 38rem !important;
     
 }
+
+.btnEditar ,.btnEliminar{
+    cursor: pointer;
+}

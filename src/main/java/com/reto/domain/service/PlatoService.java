@@ -5,6 +5,8 @@ import com.reto.persistence.entity.Plato;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.http.ResponseEntity;
+
 public interface PlatoService {
 
     Optional<Plato> buscarPlato (long idPlato);
@@ -14,7 +16,7 @@ public interface PlatoService {
 
     void crearPlato (Plato plato);
 
-    void modificarPlato(Plato plato) ;
+    void modificarPlato(long idPlato,Plato plato) ;
 
-    void eliminarPlato(long idPlato) ;
+    ResponseEntity<Void> eliminarPlato(long idPlato) ;
 }

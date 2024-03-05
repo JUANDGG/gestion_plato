@@ -6,6 +6,7 @@ import com.reto.persistence.entity.Plato;
 import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -41,9 +42,9 @@ public class PlatoServiceImpl implements  PlatoService{
 
     @Override
     public void crearPlato(Plato plato) {
-        Optional<Plato> buscarPlato =buscarPlato(plato.getIdPlato()) ;
-        if (buscarPlato.isPresent()) {
-            throw new RuntimeException("!☢️ el plato que desea crear ya a sido creado ...");
+        List<Plato> buscarPlato = platoRepository.buscar_x_nombre(plato.getNombrePlato());
+        if (!buscarPlato.isEmpty()) {
+            throw new RuntimeException("!☢️ el plato que desea crear ya ha sido creado ...");
         }
         else {
             platoRepository.save(plato);
@@ -51,28 +52,32 @@ public class PlatoServiceImpl implements  PlatoService{
     }
 
     @Override
-    public void modificarPlato(Plato plato) {
-        Optional<Plato> miPlato =buscarPlato(plato.getIdPlato()) ;
+    public void modificarPlato(long idPlato , Plato plato) {
+        Optional<Plato> miPlato = buscarPlato(idPlato);
         if (!miPlato.isPresent()) {
-            throw new RuntimeException("!☢️ el plato que desea modifica no a sido creado todavia ...");
-        }
-        else {
-            var objPlato = buscarPlato(plato.getIdPlato()).get();
-            objPlato.setDescripcion(plato.getDescripcion());
-            platoRepository.save(plato);
-        }
-    }
-
-
-
-    @Override
-    public void eliminarPlato(long idPlato) {
-        Optional<Plato> buscarPlato =buscarPlato(idPlato) ;
-        if (!buscarPlato.isPresent()) {
-            throw new RuntimeException("!☢️ el plato que desea eliminar no a sido creado todavia ...");
-        }
-        else {
-            platoRepository.deleteById(idPlato);
+            throw new RuntimeException("!☢️ el plato que desea modificar no ha sido creado todavía ...");
+        } else {
+            var objPlato = miPlato.get();
+            if(!plato.getDescripcion().equals("")){
+                objPlato.setDescripcion(plato.getDescripcion());
+                platoRepository.save(objPlato); // Guarda objPlato después de cambiar la descripción
+            }
+            // Si la descripción está vacía, no se hace nada
         }
     }
+
+        
+
+
+
+  @Override
+public ResponseEntity<Void> eliminarPlato(long idPlato) {
+    Optional<Plato> buscarPlato = buscarPlato(idPlato);
+    if (!buscarPlato.isPresent()) {
+        throw new RuntimeException("!☢️ el plato que desea eliminar no a sido creado todavia ...");
+    } else {
+        platoRepository.deleteById(idPlato);
+    }
+    return ResponseEntity.noContent().build();
+}
 }
